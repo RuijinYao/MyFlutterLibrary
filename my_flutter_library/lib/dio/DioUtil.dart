@@ -8,6 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 ///网络请求的工具类, 单例模式
+///网络返回数据格式
+//{
+//  "accessToken": "string",
+//  "message": "string",
+//  "result": {}, //具体请求结果
+//  "status": 0
+//}
 class DioUtil {
   static DioUtil _instance;
 
