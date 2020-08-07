@@ -49,6 +49,7 @@ dependencies:
   flutter_picker: ^1.1.5
   pull_to_refresh: ^1.5.7
   image_picker: ^0.6.7
+  shared_preferences: ^0.5.8
 
 
 # 区别于dependencies标签，dependencies是生产环境依赖库版本，dev_dependencies是开发环境依赖库版本，该环境仅在开发调试时使用。标签规则同dependencies。
