@@ -1,50 +1,66 @@
 name: my_flutter_library
 description: 记录在flutter开发中遇到的知识点, 自勉
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+# 下面的行防止使用pub publish将该软件包意外发布到pub.dev。 这对于私有软件包是首选的。
+publish_to: 'none' # 如果您希望发布到pub.dev，请删除此行
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+#以下内容定义了您的应用程序的版本和内部版本号。
+#版本号是由点分隔的三个数字，例如1.2.43
+#后接可选的内部版本号，并用+分隔。
+#版本和构建器编号都可能会被覆盖
+#通过分别指定--build-name和--build-number进行构建。
+#在Android中，将build-name用作versionName，将build-number用作versionCode。
+#在https://developer.android.com/studio/publish/versioning上了解有关Android版本的更多信息
+#在iOS中，内部版本号用作CFBundleShortVersionString，内部版本号用作CFBundleVersion。
+#阅读有关iOS版本控制的更多信息
+#https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+
+# 若需要将项目托管在pub.dev则该字段必填。
 version: 1.0.0+1
 
+# flutter 环境配置 flutter的sdk版本在此之间
 environment:
   sdk: ">=2.7.0 <3.0.0"
+
+#一下为依赖包管理
+#对于未发布在Pub仓库的插件可以使用git仓库地址或文件路径：
+
+#  plugin1:
+#    git:
+#      url: "git://github.com/flutter/plugin1.git"
+#      ref: some-branch   #其中ref标明获取的分支信息
+#  plugin2:
+#    path: ../plugin2/
+
+#脱字号 ^ 开头的版本表示 和当前版本接口保持兼容 的最新版，^1.2.3 等效于 >=1.2.3 <2.0.0(1.x.x 的上一个大版本), 而 ^0.1.2 等效于 >=0.1.2 <0.2.0(0.1.x的上一个大版本)
+
+#如果遇到插件库的依赖库引用冲突，如版本不一致，插件库使用了一个版本的依赖库、项目中又引入了另一个版本的插件库，这时可能会产生冲突。
+#Flutter 官方建议我们的插件库所用的依赖库版本声明中，要声明使用范围，而不是指定某个固定版本号。
 
 dependencies:
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  provider: ^4.1.3
 
+  intl: ^0.16.0
+  crypto: ^2.0.6
+  dio: ^3.0.9
+  flutter_picker: ^1.1.5
+  pull_to_refresh: ^1.5.7
+  image_picker: ^0.6.7
+
+
+# 区别于dependencies标签，dependencies是生产环境依赖库版本，dev_dependencies是开发环境依赖库版本，该环境仅在开发调试时使用。标签规则同dependencies。
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
+  # 添加本地图片资源
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
@@ -59,8 +75,10 @@ flutter:
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
-  # example:
+
+  # 添加字体:
   # fonts:
+      #family与fonts是一个整体，列表的一项
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
