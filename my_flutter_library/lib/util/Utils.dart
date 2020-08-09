@@ -41,8 +41,6 @@ class Utils {
         cancelText: "取消",
         confirmText: "确认",
         onConfirm: (Picker picker, List value) {
-          print("value" + value.toString());
-          print("picker" + picker.getSelectedValues().toString());
           onConfirm(picker, value);
         }
     ).showModal(context);
