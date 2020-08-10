@@ -3,6 +3,7 @@ import 'package:my_flutter_library/ListAnimationPage.dart';
 import 'package:my_flutter_library/WidgetTestPage.dart';
 import 'package:my_flutter_library/CustomerFontPage.dart';
 import 'package:my_flutter_library/login/LoginPage.dart';
+import 'package:my_flutter_library/widget/AnimationList.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ListAnimationPage(),
+      home: AnimatedListPage(),
     );
   }
 }
