@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_flutter_library/util/Utils.dart';
 import 'package:my_flutter_library/widget/CommonWidget.dart';
 import 'package:my_flutter_library/widget/MessageDialog.dart';
@@ -73,12 +74,70 @@ class WidgetTestPageState extends State<WidgetTestPage> {
                 topLeft: Radius.circular(15), topRight: Radius.circular(15))),
         context: context,
         builder: (context) {
-          return Center(
-            child: Text("BottomSheet"),
+          return Container(
+            //ModalBottomSheet 的高度为子控件高度, 如果没指定, 则为默认值
+            height: 400.h,
+            color: Colors.black12.withAlpha(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  height: 60.h,
+                  child: Center(
+                      child: Text("分享", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.sp))
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      _buildShareItem(FontAwesomeIcons.google, Colors.yellow, "Google"),
+                      _buildShareItem(FontAwesomeIcons.facebook, Colors.blue, "Facebook"),
+                      _buildShareItem(FontAwesomeIcons.twitter, Colors.lightBlue, "Twitter"),
+                      _buildShareItem(FontAwesomeIcons.link, Colors.orange, "复制链接"),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: Colors.white,
+                  width: ScreenUtil.screenWidth,
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Center(child: Text("取消", style: TextStyle(fontWeight: FontWeight.bold))),
+                  ),
+                )
+              ],
+            ),
           );
         }).then((_) {
       print("关闭BottomSheet后的操作可在这里执行");
     });
+  }
+
+  Widget _buildShareItem(IconData iconData, Color color, String itemName){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 18.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Icon(iconData, color: color, size: 30),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20.h),
+            child: Text("$itemName", style: TextStyle(fontSize: 20.sp),),
+          )
+        ],
+      ),
+    );
   }
 
   void _showDialog() async {
