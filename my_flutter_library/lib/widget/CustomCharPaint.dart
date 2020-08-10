@@ -12,7 +12,7 @@ class CustomChartPaint extends CustomPainter {
 
   Color backgroundColor = Color(0xFFF6F6F6); //条形图背景颜色
   Color barColor = Color(0xFF5858D6); //条形图颜色
-  Color checkBarColor = Color(0xFF9858D6); //条形图颜色
+  Color checkBarColor = Color(0xFF3838C6); //条形图颜色
   static const Color startTextColor = Colors.white; //字体颜色
   static const Color endTextColor = Color(0xFF5858D6); //字体颜色
 

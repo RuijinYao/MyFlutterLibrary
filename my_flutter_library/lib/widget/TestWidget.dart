@@ -10,10 +10,10 @@ class TestWidget extends StatefulWidget {
   final String myChosen;
   final bool animation;
 
-  int animationDuration = 500;
+  int animationDuration;
   double percent;
 
-  TestWidget({@required this.value, @required this.count, @required this.itemName, this.animation, this.animationDuration, this.myChosen}) {
+  TestWidget({@required this.value, @required this.count, @required this.itemName, this.animation : true, this.animationDuration : 1000, this.myChosen}) {
     percent = value / count;
   }
 
@@ -70,9 +70,9 @@ class TestWidgetState extends State<TestWidget> with SingleTickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
+        margin: EdgeInsets.symmetric(vertical: 15.h),
         child: CustomPaint(
-          size: Size(ScreenUtil.screenWidth, 80.0),
+          size: Size(ScreenUtil.screenWidth, 80.h),
           painter: CustomChartPaint(
               data: widget.value,
               itemName: widget.itemName,
