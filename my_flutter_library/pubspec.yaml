@@ -66,6 +66,7 @@ flutter:
   # 添加本地图片资源
   assets:
     - assets/login_logo.png
+    - assets/check.png
 
 
   #要将自定义字体添加到您的应用程序中，请在此处添加字体部分，
