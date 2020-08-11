@@ -6,7 +6,8 @@ import '../util/Constant.dart';
 class CommonWidget{
 
   static Widget buildTextForm(
-      {String hintText, Icon icon, bool obscure = true, Icon suffixIcon, FocusNode focusNode, Function suffixOnPress, FormFieldValidator<String> validator, Function onEditingComplete}) {
+      {TextEditingController controller, String hintText, Icon icon, bool obscure = true, Icon suffixIcon, FocusNode focusNode,
+          Function suffixOnPress, FormFieldValidator<String> validator, Function onEditingComplete}) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
@@ -25,6 +26,7 @@ class CommonWidget{
             style: TextStyle(fontSize: 16, color: Colors.black),
             validator: validator,
             onEditingComplete: onEditingComplete,
+            controller: controller,
         ),
       ),
     );

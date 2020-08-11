@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +9,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'Constant.dart';
 
 class Utils {
+
+    //MD5加密
+    static generateMd5(String password) {
+        if (password != null) {
+            var content = Utf8Encoder().convert(password);
+            var digest = md5.convert(content);
+            return hex.encode(digest.bytes).toString();
+        }
+    }
 
   //普通数组选择器
   static void getPicker(BuildContext context, String title, List data, Function(Picker picker, List value) onConfirm){

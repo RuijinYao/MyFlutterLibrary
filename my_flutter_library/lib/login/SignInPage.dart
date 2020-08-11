@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_flutter_library/util/Utils.dart';
 
 import 'package:my_flutter_library/widget/CommonWidget.dart';
 
@@ -18,6 +20,8 @@ class SignInPageState extends State<SignInPage> {
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
 
+  TextEditingController _pwdController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   GlobalKey<FormState> _signInFormKey = GlobalKey();
 
   @override
@@ -140,6 +144,7 @@ class SignInPageState extends State<SignInPage> {
           children: <Widget>[
 
             CommonWidget.buildTextForm(
+              controller: _emailController,
               hintText: "Email Address",
               icon: Icon(Icons.email, color: Colors.black),
               focusNode: emailFocusNode,
@@ -161,8 +166,9 @@ class SignInPageState extends State<SignInPage> {
             CommonWidget.buildLine(),
 
             CommonWidget.buildTextForm(
+              controller: _pwdController,
               hintText: "Password",
-              icon: Icon(Icons.email, color: Colors.black),
+              icon: Icon(Icons.lock_outline, color: Colors.black),
               focusNode: passwordFocusNode,
               obscure: isShowPassWord,
               suffixIcon: Icon(Icons.remove_red_eye, color: Colors.black),
@@ -208,6 +214,10 @@ class SignInPageState extends State<SignInPage> {
           //调用所有自孩子的save回调，保存表单内容
           _signInFormKey.currentState.save();
         }
+
+        //todo 网络请求登录,
+        // 密码实现MD5加密
+        Utils.generateMd5(_pwdController.text.trim());
       },
     );
   }
