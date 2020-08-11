@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_flutter_library/widget/MyTabBar.dart';
 
 import 'util/Constant.dart';
 
@@ -23,6 +24,12 @@ class ListAnimationPageState extends State<ListAnimationPage>{
       appBar: AppBar(
         centerTitle: true,
         title: Text("List 入场动画"),
+          bottom: MyTabBar(
+              List.castFrom(["日", "月", "年"]),
+              _handler,
+              primaryColor: Theme.of(context).primaryColor,
+          ),
+          elevation: 0,
       ),
       body: ListView.separated(
           itemBuilder: (BuildContext context, int index){
@@ -102,5 +109,9 @@ class ListAnimationPageState extends State<ListAnimationPage>{
         ],
       ),
     );
+  }
+
+  void _handler(int index) {
+      print("currentIndex: $index");
   }
 }
