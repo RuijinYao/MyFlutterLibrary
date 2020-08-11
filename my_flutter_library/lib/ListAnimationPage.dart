@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_flutter_library/widget/CommonWidget.dart';
 import 'package:my_flutter_library/widget/MyTabBar.dart';
 
 import 'util/Constant.dart';
@@ -33,7 +34,7 @@ class ListAnimationPageState extends State<ListAnimationPage>{
       ),
       body: ListView.separated(
           itemBuilder: (BuildContext context, int index){
-            return _buildMsgItem("itemName", "ListView.separated 构造列表项的分割线, 分割线使用Divider", "2020-01-01", index);
+            return CommonWidget.buildMsgItem("itemName", "ListView.separated 构造列表项的分割线, 分割线使用Divider", "2020-01-01", index);
           },
           separatorBuilder: (BuildContext context, int index){
             return Divider(
@@ -43,71 +44,6 @@ class ListAnimationPageState extends State<ListAnimationPage>{
             );
           },
           itemCount: 15),
-    );
-  }
-
-  //仿微信的聊天列表项
-  Widget _buildMsgItem(String itemName, String itemContent, String time, int count){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 15.w),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image(
-                  width: 70.w, height: 70.w,
-                  image: AssetImage("assets/avatar.jpg")),
-            ),
-          ),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10.h),
-                  child: Text(itemName, style: TextStyle(fontSize: 30.sp),),
-                ),
-                Text(
-                  itemContent,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.black.withAlpha(128)
-                  ),
-                )
-              ],
-            ),
-          ),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(bottom: 10.h),
-                child: Text(
-                  time,
-                  style: TextStyle(
-                      color: Colors.black.withAlpha(128)
-                  ),
-                ),
-              ),
-
-              Offstage(
-                offstage: count == 0,
-                child: CircleAvatar(
-                  radius: 8,
-                  backgroundColor: Colors.red,
-                  child: Text("$count", style: TextStyle(fontSize: 8, color: Colors.white),),
-                ),
-              )
-            ],
-          )
-
-        ],
-      ),
     );
   }
 

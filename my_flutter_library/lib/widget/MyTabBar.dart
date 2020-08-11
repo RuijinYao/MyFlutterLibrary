@@ -18,7 +18,7 @@ class MyTabBar extends StatefulWidget implements PreferredSizeWidget {
 
   ///120.h  =  vertical padding of Container * 2 + height of child Container;
   @override
-  Size get preferredSize => Size.fromHeight(120.h);
+  Size get preferredSize => Size.fromHeight(90);
 }
 
 class MyTabBarState extends State<MyTabBar> {
@@ -28,7 +28,7 @@ class MyTabBarState extends State<MyTabBar> {
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 20.h),
+        padding: EdgeInsets.symmetric(vertical: 20),
         child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +54,7 @@ class MyTabBarState extends State<MyTabBar> {
       0,
       () => Container(
         width: (constraints.maxWidth / widget.tabs.length) - 35.w,
-        height: 60.h,
+        height: 50,
         child: Center(
           child: Text(widget.tabs[0], style: TextStyle(fontSize: 30.sp)),
         ),
