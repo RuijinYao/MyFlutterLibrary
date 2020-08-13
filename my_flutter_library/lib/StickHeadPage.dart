@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:my_flutter_library/widget/CommonWidget.dart';
 import 'package:my_flutter_library/widget/MyTabBar.dart';
 
@@ -23,8 +24,25 @@ class StickHeadPageState extends State<StickHeadPage> {
           SliverToBoxAdapter(
             child: Container(
               height: 400.h,
-              child: Center(
-                  child: Text("任意内容"),
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: Swiper(
+                  itemBuilder: (BuildContext context, int index) {
+                      return new Image.network(
+                          "http://via.placeholder.com/288x188",
+                          fit: BoxFit.fill,
+                      );
+                  },
+                  itemCount: 10,
+                  //当前页显示比例
+                  viewportFraction: 0.8,
+                  //左右两页的缩放
+                  scale: 0.9,
+                  autoplay: true,
+                  autoplayDelay: 5000,
+                  pagination: SwiperPagination(),
+                  onTap: (int index){
+                      print("当前点击图片的索引值为: $index");
+                  },
               ),
             ),
           ),
