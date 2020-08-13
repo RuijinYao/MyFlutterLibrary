@@ -52,7 +52,10 @@ dependencies:
   image_picker: ^0.6.7
   shared_preferences: ^0.5.8
   flutter_screenutil: ^2.3.1
-
+  permission_handler: ^5.0.1+1
+  path_provider: ^1.6.11
+  package_info: ^0.4.1
+  url_launcher: ^5.5.0
 
 # 区别于dependencies标签，dependencies是生产环境依赖库版本，dev_dependencies是开发环境依赖库版本，该环境仅在开发调试时使用。标签规则同dependencies。
 dev_dependencies:
@@ -68,6 +71,7 @@ flutter:
     - assets/login_logo.png
     - assets/avatar.jpg
     - assets/check.png
+    - assets/double_ring_loading_io.gif
 
 
   #要将自定义字体添加到您的应用程序中，请在此处添加字体部分，

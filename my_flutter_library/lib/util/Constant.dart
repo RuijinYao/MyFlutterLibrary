@@ -16,8 +16,8 @@ class Constant {
   static int endYear = 2100;
 
   //网络请求 连接与介绍超时时间, 毫秒
-  static int connectTime = 5;
-  static int receiveTime = 5;
+  static int connectTime = 5000;
+  static int receiveTime = 5000;
 
   //请求成功返回 1
   static int succeed = 1;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <paths>
+        <!-- 如果你将path设为path="pictures"，那么它代表着根目录下的pictures目录(eg:/storage/emulated/0/pictures) -->
+        <external-path
+            path=""
+            name="download" />
+    </paths>
+</resources>

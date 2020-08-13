@@ -131,6 +131,23 @@ class DioUtil {
 
     //todo showToast(error['message']);
   }
+
+  Future download(String url, String savePath, {ProgressCallback onReceiveProgress, CancelToken cancelToken}) async {
+      Response response;
+      try {
+          response = await dio.download(
+              url,
+              savePath,
+              cancelToken: cancelToken,
+              onReceiveProgress: onReceiveProgress,
+              options: Options(receiveTimeout: 1000 * 600)
+          );
+      } on DioError catch(e){
+          print('downloadFile error---------$e');
+      }
+
+      return response;
+  }
 }
 
 
