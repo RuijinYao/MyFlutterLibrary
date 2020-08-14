@@ -14,7 +14,7 @@ public class MainActivity extends FlutterActivity {
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
 
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
+        //GeneratedPluginRegistrant.registerWith(flutterEngine);
 
 
         InstallApkPlugin.registerWith(flutterEngine.getDartExecutor().getBinaryMessenger(), this);

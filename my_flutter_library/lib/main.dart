@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_flutter_library/DownloadPage.dart';
 import 'package:my_flutter_library/ListAnimationPage.dart';
 import 'package:my_flutter_library/PagerGridPage.dart';
+import 'package:my_flutter_library/StaggeredGridPage.dart';
 import 'package:my_flutter_library/StickHeadPage.dart';
 import 'package:my_flutter_library/WidgetTestPage.dart';
 import 'package:my_flutter_library/CustomerFontPage.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: StickHeadPage(),
+      home: StaggeredGridPage(),
     );
   }
 }
