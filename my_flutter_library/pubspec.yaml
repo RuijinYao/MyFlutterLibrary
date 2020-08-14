@@ -75,6 +75,11 @@ flutter:
     - assets/avatar.jpg
     - assets/check.png
     - assets/placeholder.png
+    - assets/photo_1.png
+    - assets/photo_2.png
+    - assets/photo_3.png
+    - assets/photo_4.png
+    - assets/photo_5.png
     - assets/double_ring_loading_io.gif
 
 
