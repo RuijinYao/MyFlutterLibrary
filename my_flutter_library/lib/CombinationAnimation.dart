@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CombinationAnimation extends StatefulWidget {
+class CombineAnimationPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CombinationAnimationState();
+    return CombineAnimationPageState();
   }
 }
 
-class CombinationAnimationState extends State<CombinationAnimation> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class CombineAnimationPageState extends State<CombineAnimationPage> with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   // 卡片列表
   final List<Widget> _cards = [];
 
