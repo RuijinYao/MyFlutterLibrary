@@ -14,3 +14,31 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+已完成:
+    吸顶标题栏
+    动画
+    原生通信
+    网格分页
+    瀑布流
+    自定义 柱状图
+    动态增加删除列表项
+    常用Widget练习
+    路由管理 fluro
+
+
+todo :
+  Flash页面
+  本地化存储
+  数据库存储
+  主题切换
+  语言切换
+  状态管理
+  第三方登录
+  自定义视图: 
+    贝塞尔曲线
+    水波纹
+  hero 练习: 仿一加应用商店
+  多级联动选择器
+   
