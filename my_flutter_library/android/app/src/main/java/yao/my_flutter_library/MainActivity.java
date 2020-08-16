@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
 
@@ -14,9 +13,9 @@ public class MainActivity extends FlutterActivity {
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
 
-        //GeneratedPluginRegistrant.registerWith(flutterEngine);
+        //BluetoothEventPlugin.registerWith(flutterEngine.getDartExecutor().getBinaryMessenger(), this);
 
-
-        InstallApkPlugin.registerWith(flutterEngine.getDartExecutor().getBinaryMessenger(), this);
+        flutterEngine.getPlugins().add(new BluetoothEventPlugin());
+        flutterEngine.getPlugins().add(new InstallApkPlugin());
     }
 }

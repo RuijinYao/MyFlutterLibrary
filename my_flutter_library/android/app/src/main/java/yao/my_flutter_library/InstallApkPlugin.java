@@ -13,6 +13,9 @@ import androidx.core.content.FileProvider;
 import java.io.File;
 import java.util.Map;
 
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -26,7 +29,7 @@ import static android.app.Activity.RESULT_OK;
  * @Author: yao
  * @Date: 2020/8/13 11:29
  */
-class InstallApkPlugin implements MethodChannel.MethodCallHandler , PluginRegistry.ActivityResultListener{
+class InstallApkPlugin implements ActivityAware, FlutterPlugin, MethodChannel.MethodCallHandler{
 
     private static  final String TAG = "InstallApkPlugin";
 
@@ -34,23 +37,79 @@ class InstallApkPlugin implements MethodChannel.MethodCallHandler , PluginRegist
 
     private static final int REQUEST_MANAGE_UNKNOWN_APP_SOURCES = 101;
 
-    private MethodChannel methodChannel;
     //负责针对处理结果 回馈 flutter;
     private MethodChannel.Result mResult;
     private MethodCall mMethodCall;
 
-
+    private FlutterPluginBinding pluginBinding;
+    private ActivityPluginBinding activityBinding;
     private Activity activity;
 
-    public static void registerWith(final BinaryMessenger messenger, final Activity activity) {
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        activityBinding = binding;
+
+        setup(pluginBinding.getBinaryMessenger(), activityBinding.getActivity());
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+        onDetachedFromActivity();
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        onAttachedToActivity(binding);
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        tearDown();
+    }
+
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
+        pluginBinding = binding;
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        pluginBinding = null;
+    }
+
+
+    public static void registerWith(PluginRegistry.Registrar registrar) {
         InstallApkPlugin plugin = new InstallApkPlugin();
-        plugin.setup(messenger, activity);
+        plugin.setup(registrar.messenger(), registrar.activity());
     }
 
     private void setup(final BinaryMessenger messenger, final Activity activity) {
         this.activity = activity;
-        methodChannel = new MethodChannel(messenger, CHANNEL);
+        MethodChannel methodChannel = new MethodChannel(messenger, CHANNEL);
         methodChannel.setMethodCallHandler(this);
+
+        activityBinding.addActivityResultListener(new PluginRegistry.ActivityResultListener() {
+            @Override
+            public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+
+                Log.e(TAG, "code=" + requestCode + ",resultCode=" + resultCode );
+                Log.e(TAG, data!=null ? "is not null" : "is null");
+
+                if (requestCode == REQUEST_MANAGE_UNKNOWN_APP_SOURCES) {
+                    if (resultCode == RESULT_OK) {
+                        installApp();
+                    } else {
+                        //用户没有打开 安装权限, 给出提醒, 重新申请权限
+                        applyInstall();
+                    }
+
+                    return true;
+                }
+
+                //@return true if the new intent has been handled
+                return false;
+            }
+        });
     }
 
     @Override
@@ -72,7 +131,7 @@ class InstallApkPlugin implements MethodChannel.MethodCallHandler , PluginRegist
     void applyInstall() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             boolean canRequestPackageInstalls = activity.getPackageManager().canRequestPackageInstalls();
-            Log.e("sauna", canRequestPackageInstalls + "");
+            Log.e(TAG, canRequestPackageInstalls + "");
             if (!canRequestPackageInstalls) {
                 Uri packageUri = Uri.parse("package:" + activity.getPackageName());
                 Intent intent1 = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
@@ -109,23 +168,8 @@ class InstallApkPlugin implements MethodChannel.MethodCallHandler , PluginRegist
         activity.startActivity(intent);
     }
 
-    @Override
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e(TAG, "code=" + requestCode + ",resultCode=" + resultCode );
-        Log.e(TAG, data!=null ? "is not null" : "is null");
-
-        if (requestCode == REQUEST_MANAGE_UNKNOWN_APP_SOURCES) {
-            if (resultCode == RESULT_OK) {
-                installApp();
-            } else {
-                //用户没有打开 安装权限, 给出提醒, 重新申请权限
-                applyInstall();
-            }
-
-            return true;
-        }
-
-        //@return true if the new intent has been handled
-        return false;
+    private void tearDown() {
+        activityBinding = null;
+        mMethodCall = null;
     }
 }

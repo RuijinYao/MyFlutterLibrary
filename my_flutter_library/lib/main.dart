@@ -1,7 +1,8 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_library/Application.dart';
-import 'package:my_flutter_library/CombinationAnimation.dart';
+import 'package:my_flutter_library/DownloadPage.dart';
+import 'package:my_flutter_library/EventChannelTestPage.dart';
 import 'package:my_flutter_library/route/Routes.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       //将路由配置到MaterialApp中
       onGenerateRoute: Application.router.generator,
-      home: CombineAnimationPage(),
+      home: DownloadPage(),
     );
   }
 }
