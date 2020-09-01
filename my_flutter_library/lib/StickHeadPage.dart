@@ -64,7 +64,7 @@ class StickHeadPageState extends State<StickHeadPage> {
 }
 
 class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final MyTabBar child;
+  final PreferredSizeWidget child;
 
   StickyTabBarDelegate({@required this.child});
 

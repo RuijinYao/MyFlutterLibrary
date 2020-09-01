@@ -90,10 +90,13 @@ class CommonWidget{
               children: <Widget>[
                   Padding(
                       padding: EdgeInsets.only(right: 15.w),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image(width: 70.w, height: 70.w, image: AssetImage("assets/avatar.jpg")),
-                      ),
+                      child: Hero(
+                          tag: "$itemName$count",
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image(width: 70.w, height: 70.w, image: AssetImage("assets/avatar.jpg")),
+                          ),
+                      )
                   ),
                   Expanded(
                       child: Column(

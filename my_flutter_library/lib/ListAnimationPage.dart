@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_flutter_library/DetailPage.dart';
 import 'package:my_flutter_library/widget/CommonWidget.dart';
 import 'package:my_flutter_library/widget/MyTabBar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -43,7 +44,11 @@ class ListAnimationPageState extends State<ListAnimationPage> {
           onRefresh: onRefresh,
           child: ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                return CommonWidget.buildMsgItem("itemName", "ListView.separated 构造列表项的分割线, 分割线使用Divider", "2020-01-01", index);
+                return GestureDetector(
+                  onTap: () => _gotoDetail("itemName", index),
+                  behavior: HitTestBehavior.translucent,
+                  child: CommonWidget.buildMsgItem("itemName", "ListView.separated 构造列表项的分割线, 分割线使用Divider", "2020-01-01", index),
+                );
               },
               separatorBuilder: (BuildContext context, int index) {
                 return Divider(
@@ -60,26 +65,32 @@ class ListAnimationPageState extends State<ListAnimationPage> {
     print("currentIndex: $index");
   }
 
-  void onLoading() async{
+  void onLoading() async {
     currentPage += 1;
 
     await Future.delayed(Duration(milliseconds: 1000));
     setState(() {
-        list.addAll([6, 4, 9, 40, 34]);
+      list.addAll([6, 4, 9, 40, 34]);
     });
 
     _controller.loadComplete();
   }
 
-  void onRefresh() async{
+  void onRefresh() async {
     currentPage = 1;
 
     await Future.delayed(Duration(milliseconds: 1000));
     setState(() {
-        list.clear();
-        list.addAll([1, 2, 3, 4, 5, 6]);
+      list.clear();
+      list.addAll([1, 2, 3, 4, 5, 6]);
     });
 
     _controller.refreshCompleted(resetFooterState: true);
+  }
+
+  _gotoDetail(String itemName, int index) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return DetailPage(itemName, index);
+    }));
   }
 }
