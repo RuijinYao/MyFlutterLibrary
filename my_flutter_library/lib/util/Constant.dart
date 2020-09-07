@@ -36,4 +36,14 @@ class Constant {
   static String hasLogin = "hasLogin";
 
   static String token = "token";
+
+
+  static final String tableTempRecord = "temp_record";
+  static final String columnId = "id";
+  static final String columnTemp = "temp";
+  static final String columnStatus = "status";
+  static final String columnMode = "Mode";
+  static final String columnTime = "time";
+  static final String columnDate = "date";
+  static final String columnIsCelsius = "isCelsius";
 }

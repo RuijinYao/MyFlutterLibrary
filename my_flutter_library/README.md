@@ -26,12 +26,12 @@ samples, guidance on mobile development, and a full API reference.
     动态增加删除列表项
     常用Widget练习
     路由管理 fluro
+    数据库存储
 
 
 todo :
   Flash页面
   本地化存储
-  数据库存储
   主题切换
   语言切换
   状态管理
