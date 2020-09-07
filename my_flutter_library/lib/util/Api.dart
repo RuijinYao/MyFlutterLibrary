@@ -5,4 +5,7 @@ class Api{
 
     //用户登录
     static const String USER_LOGIN = "auth/user/login";
+
+    //用户 刷新token
+    static const String USER_REFRESH_TOKEN = "auth/user/refresh";
 }

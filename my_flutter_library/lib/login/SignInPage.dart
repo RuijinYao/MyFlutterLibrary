@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_flutter_library/util/Constant.dart';
 import 'package:my_flutter_library/util/Utils.dart';
 
 import 'package:my_flutter_library/widget/CommonWidget.dart';
+import 'package:sp_util/sp_util.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -218,6 +220,9 @@ class SignInPageState extends State<SignInPage> {
         //todo 网络请求登录,
         // 密码实现MD5加密
         Utils.generateMd5(_pwdController.text.trim());
+
+        SpUtil.putBool(Constant.hasLogin, true);
+        SpUtil.putString(Constant.token, "token");
       },
     );
   }

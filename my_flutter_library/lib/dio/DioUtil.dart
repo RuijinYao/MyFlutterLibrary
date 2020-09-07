@@ -4,8 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:my_flutter_library/util/Api.dart';
 import 'package:my_flutter_library/util/Constant.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:sp_util/sp_util.dart';
 
 ///网络请求的工具类, 单例模式
 ///网络返回数据格式
@@ -34,7 +33,9 @@ class DioUtil {
     dio.options.receiveTimeout = Constant.receiveTime;
 
     ///token 拦截
-    dio.interceptors.add(MyInterceptor());
+    dio.interceptors.add(TokenInterceptor());
+    ///刷新token 拦截器
+    dio.interceptors.add(RefreshTokenInterceptor());
 
     ///日志拦截
     dio.interceptors.add(LogInterceptor(responseBody: Constant.isDebug));
@@ -52,7 +53,8 @@ class DioUtil {
     return _requestHttp(url, successCallBack, "post", params, errorCallBack, isFormData);
   }
 
-  Future<Map> _requestHttp(String url, [Function successCallBack, String method, Map<String, dynamic> params, Function errorCallBack, bool isFormData]) async {
+  Future<Map> _requestHttp(String url,
+      [Function successCallBack, String method, Map<String, dynamic> params, Function errorCallBack, bool isFormData]) async {
     Response response;
     try {
       if (method == 'get') {
@@ -62,14 +64,13 @@ class DioUtil {
           response = await dio.get(url);
         }
       } else if (method == 'post') {
-
         if (params != null && params.isNotEmpty) {
-            if(isFormData){
-                response = await dio.post(url, data: FormData.fromMap(params));
-            } else {
-                //网络请求报错HTTP error 415 with FormData 时, 参数不能用 FormData 格式
-                response = await dio.post(url, data: params);
-            }
+          if (isFormData) {
+            response = await dio.post(url, data: FormData.fromMap(params));
+          } else {
+            //网络请求报错HTTP error 415 with FormData 时, 参数不能用 FormData 格式
+            response = await dio.post(url, data: params);
+          }
         } else {
           response = await dio.post(url);
         }
@@ -133,31 +134,24 @@ class DioUtil {
   }
 
   Future download(String url, String savePath, {ProgressCallback onReceiveProgress, CancelToken cancelToken}) async {
-      Response response;
-      try {
-          response = await dio.download(
-              url,
-              savePath,
-              cancelToken: cancelToken,
-              onReceiveProgress: onReceiveProgress,
-              options: Options(receiveTimeout: 1000 * 600)
-          );
-      } on DioError catch(e){
-          print('downloadFile error---------$e');
-      }
+    Response response;
+    try {
+      response = await dio.download(url, savePath,
+          cancelToken: cancelToken, onReceiveProgress: onReceiveProgress, options: Options(receiveTimeout: 1000 * 600));
+    } on DioError catch (e) {
+      print('downloadFile error---------$e');
+    }
 
-      return response;
+    return response;
   }
 }
 
-
 ///网络请求的自定义拦截器, 主要实现网络请求中token的检验
 ///用户登录时自动获取token值, 并且保存本地, 其他的接口请求时自动在 header中加入检验
-class MyInterceptor extends Interceptor {
+class TokenInterceptor extends Interceptor {
   @override
   Future onRequest(RequestOptions options) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String token = preferences.getString(Constant.token);
+    String token = SpUtil.getString(Constant.token);
 
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = "Bearer " + token;
@@ -168,17 +162,69 @@ class MyInterceptor extends Interceptor {
 
   @override
   Future onResponse(Response response) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-
     String uri = response.request.uri.toString();
     //如果是登录接口, 将保存token值
     if (uri == (Api.BASE_URL + Api.USER_LOGIN)) {
       String dataStr = json.encode(response.data);
       Map<String, dynamic> dataMap = json.decode(dataStr);
       //此处'accessToken' 为服务器返回的具体json 中相关 token 的key, 视具体情况而定
-      preferences.setString(Constant.token, dataMap['accessToken']);
+      SpUtil.putString(Constant.token, dataMap['accessToken']);
     }
 
     return response;
+  }
+}
+
+///自定义拦截器, 自动刷新token
+class RefreshTokenInterceptor extends Interceptor {
+  Dio _tokenDio = Dio();
+
+  @override
+  Future onResponse(Response response) async {
+    //401 未认证, 刷新token值
+    if (response != null && response.statusCode == Constant.unauthorized) {
+      final Dio dio = DioUtil.getInstance().dio;
+      dio.interceptors.requestLock.lock();
+      final String refreshToken = await _refreshToken();
+      SpUtil.putString(Constant.token, refreshToken);
+      dio.interceptors.requestLock.unlock();
+
+      //重新请求接口
+      if (refreshToken != null) {
+        final RequestOptions requestOptions = response.request;
+        requestOptions.headers['Authorization'] = 'Bearer $refreshToken';
+        try {
+          //重新请求
+          final Response response = await _tokenDio.request(requestOptions.path,
+              data: requestOptions.data,
+              queryParameters: requestOptions.queryParameters,
+              cancelToken: requestOptions.cancelToken,
+              options: requestOptions,
+              onReceiveProgress: requestOptions.onReceiveProgress);
+          return response;
+        } on DioError catch (e) {
+          return e;
+        }
+      }
+    }
+
+    return super.onResponse(response);
+  }
+
+  Future<String> _refreshToken() async {
+    final Map<String, String> params = <String, String>{};
+    params['refresh_token'] = SpUtil.getString(Constant.token);
+    _tokenDio.options = DioUtil.getInstance().dio.options;
+
+    try {
+      final Response response = await _tokenDio.get(Api.USER_REFRESH_TOKEN, queryParameters: params);
+      if (response.statusCode == Constant.netSucceed) {
+        return jsonDecode(response.data)["accessToken"];
+      }
+    } on DioError catch (e) {
+      print('刷新Token失败！');
+    }
+
+    return null;
   }
 }

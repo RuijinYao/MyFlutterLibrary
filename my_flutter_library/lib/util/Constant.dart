@@ -19,6 +19,12 @@ class Constant {
   static int connectTime = 5000;
   static int receiveTime = 5000;
 
+  //网络访问成功
+  static int netSucceed = 200;
+
+  //没有登录, 或者token失效
+  static int unauthorized = 401;
+
   //请求成功返回 1
   static int succeed = 1;
 
