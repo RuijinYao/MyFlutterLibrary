@@ -2,25 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_library/widget/BaseDialog.dart';
 
 /// 弹框, 多选
+/// 可设置 默认选中项, 最多选中个数, 最小选中个数
 class MultiSelectDialog extends StatefulWidget {
   final Color positiveTextColor;
   final String title;
   final List<String> options;
+  final List<String> defaultChoice;
+  int maxChoicesNum;
+  final int minChoicesNum;
   final String negativeText;
   final String positiveText;
   final Function onCloseEvent;
-  final Function onPositivePressEvent;
+  final Function(List<int>) onPositivePressEvent;
 
   MultiSelectDialog({
     Key key,
     @required this.title,
     @required this.options,
+    this.defaultChoice,
+    this.maxChoicesNum,
+    this.minChoicesNum: 0,
     this.negativeText,
     this.positiveText,
     this.positiveTextColor,
     this.onPositivePressEvent,
     @required this.onCloseEvent,
-  }) : super(key: key);
+  }) : super(key: key) {
+    if (maxChoicesNum == null) {
+      maxChoicesNum = options.length;
+    }
+  }
 
   @override
   State<StatefulWidget> createState() {
@@ -29,27 +40,38 @@ class MultiSelectDialog extends StatefulWidget {
 }
 
 class MultiSelectDialogState extends State<MultiSelectDialog> {
-  List _values = [];
+  List<int> _values = [];
+
+  @override
+  void initState() {
+    super.initState();
+    widget.defaultChoice.forEach((element) {
+      _values.add(widget.options.indexOf(element));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
       child: BaseDialog(
-        title: widget.title,
-        negativeText: widget.negativeText,
-        positiveText: widget.positiveText,
-        positiveTextColor: widget.positiveTextColor,
-        onCloseEvent: widget.onCloseEvent,
-        onPositivePressEvent: () {
-          Navigator.pop(context);
-          widget.onPositivePressEvent(_values);
-        },
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(widget.options.length, (i) => _buildItem(i))),
-      ),
+          title: widget.title,
+          negativeText: widget.negativeText,
+          positiveText: widget.positiveText,
+          positiveTextColor: widget.positiveTextColor,
+          onCloseEvent: widget.onCloseEvent,
+          onPositivePressEvent: () {
+            Navigator.pop(context);
+            widget.onPositivePressEvent(_values);
+          },
+          body: Container(
+              constraints: BoxConstraints(maxHeight: 300),
+              child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(widget.options.length, (i) => _buildItem(i))),
+              ))),
     );
   }
 
@@ -71,7 +93,9 @@ class MultiSelectDialogState extends State<MultiSelectDialog> {
                               fontSize: 14,
                               color: Theme.of(context).primaryColor,
                             )
-                          : null,
+                          : TextStyle(
+                              fontSize: 13,
+                            ),
                     ),
                   ),
                   Visibility(visible: _values.contains(index), child: Image.asset('assets/ic_check.png', width: 16.0, height: 16.0)),
@@ -80,13 +104,21 @@ class MultiSelectDialogState extends State<MultiSelectDialog> {
             ),
             onTap: () {
               if (mounted) {
-                setState(() {
-                  if(_values.contains(index)){
+                if (_values.contains(index)) {
+                  //当前数量大于最小数时才能取消勾选
+                  if (_values.length > widget.minChoicesNum) {
+                    setState(() {
                       _values.remove(index);
-                  } else {
-                      _values.add(index);
+                    });
                   }
-                });
+                } else {
+                  //当前数量,小于最多可选数时才能继续选择
+                  if (_values.length < widget.maxChoicesNum) {
+                    setState(() {
+                      _values.add(index);
+                    });
+                  }
+                }
               }
             },
           ),

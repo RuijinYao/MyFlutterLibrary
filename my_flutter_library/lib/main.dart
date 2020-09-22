@@ -5,6 +5,8 @@ import 'package:my_flutter_library/BezierTestPage.dart';
 import 'package:my_flutter_library/DownloadPage.dart';
 import 'package:my_flutter_library/EventChannelTestPage.dart';
 import 'package:my_flutter_library/ListAnimationPage.dart';
+import 'package:my_flutter_library/WaterRipplePage.dart';
+import 'package:my_flutter_library/login/LoginPage.dart';
 import 'package:my_flutter_library/route/Routes.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
       ),
       //将路由配置到MaterialApp中
       onGenerateRoute: Application.router.generator,
-      home: BezierTestPage(),
+      home: WaterRipplePage(),
     );
   }
 }
