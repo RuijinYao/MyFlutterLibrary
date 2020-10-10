@@ -61,6 +61,9 @@ dependencies:
   cached_network_image : ^2.2.0+1
   sp_util: ^1.0.1
   fluro: ^1.6.3
+  webview_flutter: ^0.3.24
+  cookie_jar: ^1.0.0
+  dio_cookie_manager: ^1.0.0
 
 # 区别于dependencies标签，dependencies是生产环境依赖库版本，dev_dependencies是开发环境依赖库版本，该环境仅在开发调试时使用。标签规则同dependencies。
 dev_dependencies:

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 import 'package:my_flutter_library/util/Api.dart';
 import 'package:my_flutter_library/util/Constant.dart';
@@ -40,7 +42,8 @@ class DioUtil {
     ///日志拦截
     dio.interceptors.add(LogInterceptor(responseBody: Constant.isDebug));
 
-    //dio.interceptors.add(CookieManager(CookieJar()));//cookie 拦截 详情参考 https://github.com/flutterchina/cookie_jar
+    ///cookie 拦截 详情参考 https://github.com/flutterchina/cookie_jar
+    dio.interceptors.add(CookieManager(CookieJar()));
   }
 
   //get请求
@@ -180,9 +183,9 @@ class RefreshTokenInterceptor extends Interceptor {
   Dio _tokenDio = Dio();
 
   @override
-  Future onResponse(Response response) async {
+  Future onError(DioError error) async {
     //401 未认证, 刷新token值
-    if (response != null && response.statusCode == Constant.unauthorized) {
+    if (error.response != null && error.response.statusCode == Constant.unauthorized) {
       final Dio dio = DioUtil.getInstance().dio;
       dio.interceptors.requestLock.lock();
       final String refreshToken = await _refreshToken();
@@ -191,7 +194,7 @@ class RefreshTokenInterceptor extends Interceptor {
 
       //重新请求接口
       if (refreshToken != null) {
-        final RequestOptions requestOptions = response.request;
+        final RequestOptions requestOptions = error.response.request;
         requestOptions.headers['Authorization'] = 'Bearer $refreshToken';
         try {
           //重新请求
@@ -208,7 +211,7 @@ class RefreshTokenInterceptor extends Interceptor {
       }
     }
 
-    return super.onResponse(response);
+    return error;
   }
 
   Future<String> _refreshToken() async {

@@ -8,7 +8,7 @@ class InputDialog extends Dialog {
   final String negativeText;
   final String positiveText;
   final Function onCloseEvent;
-  final Function onPositivePressEvent;
+  final Function(String content) onPositivePressEvent;
 
   InputDialog({
     Key key,

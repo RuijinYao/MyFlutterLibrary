@@ -9,7 +9,7 @@ class SingleSelectDialog extends StatefulWidget {
   final String negativeText;
   final String positiveText;
   final Function onCloseEvent;
-  final Function onPositivePressEvent;
+  final Function(int index, String value) onPositivePressEvent;
 
   SingleSelectDialog({
     Key key,
